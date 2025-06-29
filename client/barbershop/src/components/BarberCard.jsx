@@ -33,16 +33,13 @@ export const BarberCard = ({ barber, onBookAppointment }) => {
             <span className="font-medium">Phone:</span> {barber.phone}
           </p>
         </div>
-
-        {user && (
-          <button
-            onClick={() => onBookAppointment(barber.id)}
-            className="mt-6 w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center justify-center"
-          >
-            <Calendar className="w-5 h-5 mr-2" />
-            Book Appointment
-          </button>
-        )}
+        <button
+          onClick={() => onBookAppointment(barber.id)}
+          className="mt-6 w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center justify-center"
+        >
+          <Calendar className="w-5 h-5 mr-2" />
+          Book Appointment
+        </button>
       </div>
     </div>
   );

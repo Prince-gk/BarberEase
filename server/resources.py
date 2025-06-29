@@ -138,25 +138,40 @@ class AppointmentList(Resource):
 
     def post(self):
         data = request.get_json()
+
         if not data:
-            return {"error": "Invalid input"}, 400
+            return {"error": "Invalid input: no JSON received"}, 400
+
+        required_fields = ["barberId", "serviceId", "date", "time"]
+        missing = [field for field in required_fields if field not in data]
+        if missing:
+            return {"error": f"Missing fields: {', '.join(missing)}"}, 400
 
         try:
-            # Convert string to datetime object
-            date_time = datetime.strptime(data["date_time"], "%Y-%m-%dT%H:%M")
+            # Combine and parse date and time into datetime object
+            date_str = data["date"].strip()
+            time_str = data["time"].strip()
+
+            # Accepts both "09:00" and "9:00"
+            date_time = datetime.strptime(f"{date_str}T{time_str.zfill(5)}", "%Y-%m-%dT%H:%M")
 
             appt = Appointment(
-                client_id=data["client_id"],
-                barber_id=data["barber_id"],
-                service_id=data["service_id"],
+                client_id="unknown",  # Replace with actual logic if available
+                barber_id=int(data["barberId"]),
+                service_id=int(data["serviceId"]),
                 date_time=date_time,
                 status=data.get("status", "Scheduled"),
             )
+
             db.session.add(appt)
             db.session.commit()
+
             return appt.to_dict(), 201
+
+        except ValueError as ve:
+            return {"error": f"Date/time format error: {str(ve)}"}, 400
         except Exception as e:
-            return {"error": str(e)}, 400
+            return {"error": f"Internal error: {str(e)}"}, 500
 
 
 class AppointmentDetail(Resource):
