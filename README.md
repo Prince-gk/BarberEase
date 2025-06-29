@@ -1,9 +1,16 @@
 # BarberEase Project Setup
 
 Backend => <https://barberease-3kbc.onrender.com>
-Frontend =>
+
+Frontend => <https://barber-ease.vercel.app/>
 
 Clone the repository and set up the environment:
+
+Required software:
+
+- Python 3.10 or higher && virtualenv (for Python virtual environments)
+- Node.js 20 or higher && npm (Node Package Manager)
+- Git
 
 ```bash
 git clone https://github.com/Prince-gk/BarberEase.git && cd BarberEase

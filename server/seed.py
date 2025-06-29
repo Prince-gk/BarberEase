@@ -38,6 +38,8 @@ with app.app_context():
                 ["Fade", "Beard Trim", "Braids", "Color", "Dreadlocks"]
             ),
             phone=fake.phone_number(),
+            email=fake.email(),
+            image=fake.image_url()
         )
         barbers.append(barber)
     db.session.add_all(barbers)

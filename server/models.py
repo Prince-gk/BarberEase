@@ -25,7 +25,8 @@ class Barber(db.Model, SerializerMixin):
     name = db.Column(db.String(100), nullable=False)
     specialty = db.Column(db.String(100))
     phone = db.Column(db.String(20), unique=True, nullable=False)
-
+    email = db.Column(db.String(20), unique=True, nullable=False)
+    image = db.Column(db.String, nullable=True)
     appointments = db.relationship("Appointment", backref="barber", lazy=True)
     reviews = db.relationship("Review", backref="barber", lazy=True)
 

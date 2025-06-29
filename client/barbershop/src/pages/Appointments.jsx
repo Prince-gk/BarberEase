@@ -26,7 +26,7 @@ export const Appointments = () => {
     if (!selectedAppointment) return;
 
     try {
-      const response = await fetch('/http://127.0.0.1:5555/reviews', {
+      const response = await fetch('/api/reviews', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,25 +79,22 @@ export const Appointments = () => {
               <div className="text-right">
                 <div className="flex items-center text-gray-600">
                   <Calendar className="h-5 w-5 mr-2" />
-                  {format(new Date(appointment.date), 'MMM d, yyyy')}
-                </div>
-                <div className="flex items-center text-gray-600 mt-1">
-                  <Clock className="h-5 w-5 mr-2" />
-                  {appointment.time}
+                  {appointment.date && !isNaN(new Date(appointment.date))
+                    ? format(new Date(appointment.date), 'MMM d, yyyy')
+                    : 'Invalid Date'}
                 </div>
               </div>
             </div>
 
             <div className="mt-6 flex items-center justify-between">
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                appointment.status === 'confirmed'
-                  ? 'bg-green-100 text-green-800'
-                  : appointment.status === 'pending'
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${appointment.status === 'confirmed'
+                ? 'bg-green-100 text-green-800'
+                : appointment.status === 'pending'
                   ? 'bg-yellow-100 text-yellow-800'
                   : appointment.status === 'completed'
-                  ? 'bg-blue-100 text-blue-800'
-                  : 'bg-red-100 text-red-800'
-              }`}>
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-red-100 text-red-800'
+                }`}>
                 {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
               </span>
 

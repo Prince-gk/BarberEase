@@ -57,7 +57,7 @@ export const Home = () => {
       {/* Hero Section with Background Image */}
       <div className="relative h-[300px] mb-10">
         <img
-          src="/src/images/Untitled design.png"
+          src="https://i.ytimg.com/vi/8locgr34Pls/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBPGjlvyXDFW8c2B7hkE3pBpeVTow"
           alt="Barbershop"
           className="w-full h-full object-cover opacity-30"
         />

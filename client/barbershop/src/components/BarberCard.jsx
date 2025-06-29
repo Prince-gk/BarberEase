@@ -9,7 +9,7 @@ export const BarberCard = ({ barber, onBookAppointment }) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
       <img
-        src={barber.imageUrl}
+        src={barber.imageUrl || "https://i.ytimg.com/vi/8locgr34Pls/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBPGjlvyXDFW8c2B7hkE3pBpeVTow"}
         alt={barber.name}
         className="w-full h-48 object-cover"
       />
@@ -21,7 +21,7 @@ export const BarberCard = ({ barber, onBookAppointment }) => {
           </div>
           <div className="flex items-center">
             <Star className="w-5 h-5 text-yellow-400 fill-current" />
-            <span className="ml-1 text-gray-700">{barber.rating.toFixed(1)}</span>
+            <span className="ml-1 text-gray-700">{barber.rating}</span>
           </div>
         </div>
 

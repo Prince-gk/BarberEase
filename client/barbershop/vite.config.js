@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
 		server: {
 			proxy: {
 				'/api': {
-					target: env.VITE_API_URL,
+					target: 'https://barberease-3kbc.onrender.com/',
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/api/, ''),
 				},
