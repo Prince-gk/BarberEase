@@ -32,21 +32,21 @@ with app.app_context():
     # Barbers
     barbers = []
     for _ in range(5):
-       barber = Barber(
-           name=fake.name(),
-           specialty=random.choice(["Fade", "Beard Trim", "Braids", "Color", "Dreadlocks"]),
-           phone=fake.phone_number()  
+        barber = Barber(
+            name=fake.name(),
+            specialty=random.choice(
+                ["Fade", "Beard Trim", "Braids", "Color", "Dreadlocks"]
+            ),
+            phone=fake.phone_number(),
         )
-       barbers.append(barber)
+        barbers.append(barber)
     db.session.add_all(barbers)
 
     # Clients
     clients = []
     for _ in range(10):
         client = Client(
-            name=fake.name(),
-            email=fake.unique.email(),
-            phone=fake.phone_number()
+            name=fake.name(), email=fake.unique.email(), phone=fake.phone_number()
         )
         clients.append(client)
     db.session.add_all(clients)
@@ -57,7 +57,7 @@ with app.app_context():
         Service(name="Beard Trim", price=10.0),
         Service(name="Haircut & Beard", price=20.0),
         Service(name="Braiding", price=25.0),
-        Service(name="Hair Dye", price=30.0)
+        Service(name="Hair Dye", price=30.0),
     ]
     db.session.add_all(services)
     db.session.commit()
@@ -69,8 +69,8 @@ with app.app_context():
             client_id=random.choice(clients).id,
             barber_id=random.choice(barbers).id,
             service_id=random.choice(services).id,
-            date_time=fake.date_time_between(start_date='-10d', end_date='+10d'),
-            status=random.choice(["Scheduled", "Completed", "Cancelled"])
+            date_time=fake.date_time_between(start_date="-10d", end_date="+10d"),
+            status=random.choice(["Scheduled", "Completed", "Cancelled"]),
         )
         appointments.append(appointment)
     db.session.add_all(appointments)
@@ -85,7 +85,7 @@ with app.app_context():
                 barber_id=appt.barber_id,
                 appointment_id=appt.id,
                 rating=random.randint(3, 5),
-                comment=fake.sentence()
+                comment=fake.sentence(),
             )
             reviews.append(review)
     db.session.add_all(reviews)

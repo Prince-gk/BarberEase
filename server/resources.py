@@ -6,6 +6,11 @@ from config import db
 from models import Client, Barber, Service, Appointment, Review
 
 
+class TestAPI(Resource):
+    def get(self):
+        return {"message": "okay"}
+
+
 # -------- Clients --------
 class ClientList(Resource):
     def get(self):
@@ -23,11 +28,7 @@ class ClientList(Resource):
             return {"error": "Invalid input"}, 400
 
         try:
-            client = Client(
-                name=data["name"],
-                email=data["email"],
-                phone=data["phone"]
-            )
+            client = Client(name=data["name"], email=data["email"], phone=data["phone"])
             db.session.add(client)
             db.session.commit()
             return client.to_dict(), 201
@@ -49,7 +50,7 @@ class BarberList(Resource):
             barber = Barber(
                 name=data["name"],
                 specialty=data.get("specialty", ""),
-                phone=data["phone"]
+                phone=data["phone"],
             )
             db.session.add(barber)
             db.session.commit()
@@ -78,7 +79,7 @@ class ServiceList(Resource):
             service = Service(
                 name=data["name"],
                 price=data["price"],
-                description=data.get("description", "")
+                description=data.get("description", ""),
             )
             db.session.add(service)
             db.session.commit()
@@ -115,7 +116,7 @@ class ReviewList(Resource):
                 barber_id=data["barber_id"],
                 appointment_id=data["appointment_id"],
                 rating=data["rating"],
-                comment=data.get("comment", "")
+                comment=data.get("comment", ""),
             )
 
             # Add and commit
@@ -128,6 +129,7 @@ class ReviewList(Resource):
         except Exception as e:
             db.session.rollback()  # Rollback in case of error
             return {"error": f"Failed to create review: {str(e)}"}, 400
+
 
 # -------- Appointments (Full CRUD) --------
 class AppointmentList(Resource):
@@ -148,7 +150,7 @@ class AppointmentList(Resource):
                 barber_id=data["barber_id"],
                 service_id=data["service_id"],
                 date_time=date_time,
-                status=data.get("status", "Scheduled")
+                status=data.get("status", "Scheduled"),
             )
             db.session.add(appt)
             db.session.commit()
@@ -165,7 +167,7 @@ class AppointmentDetail(Resource):
         return appt.to_dict(), 200
 
     def patch(self, id):
-        appt = Appointment.query.get(id)                                                                                                                                                                                                                
+        appt = Appointment.query.get(id)
         if not appt:
             return {"error": "Appointment not found"}, 404
 
