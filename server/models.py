@@ -1,6 +1,6 @@
 from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime
-
+from werkzeug.security import check_password_hash, generate_password_hash
 from config import db
 
 
@@ -11,9 +11,26 @@ class Client(db.Model, SerializerMixin):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     phone = db.Column(db.String(20), unique=True, nullable=False)
-
+    password = db.Column(db.String(200), nullable=False)
     appointments = db.relationship("Appointment", backref="client", lazy=True)
     reviews = db.relationship("Review", backref="client", lazy=True)
+    
+    @staticmethod
+    def hash_password(password):
+        return generate_password_hash(password)
+
+    @staticmethod
+    def check_password(password, hashed_password):
+        return check_password_hash(hashed_password, password)
+    
+    def to_dict(self):
+        # remove password from the serialized data
+        if "password" in self.__dict__:
+            del self.__dict__["password"]
+        data = SerializerMixin.to_dict(self)
+        data["appointments"] = [appointment.to_dict() for appointment in self.appointments]
+        data["reviews"] = [review.to_dict() for review in self.reviews]
+        return data
 
     serialize_rules = ("-appointments.client", "-reviews.client")
 

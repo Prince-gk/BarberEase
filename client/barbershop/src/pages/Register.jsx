@@ -32,7 +32,7 @@ export const Register = () => {
     setLoading(true);
 
     try {
-      await register(formData.name, formData.email, formData.password);
+      await register(formData.name, formData.email, formData.phone, formData.password);
       navigate('/appointments');
     } catch (err) {
       setError('Failed to create an account. Please try again.');
@@ -46,7 +46,7 @@ export const Register = () => {
       <div className="w-full max-w-md">
         <div className="bg-white px-8 py-6 rounded-lg shadow-md">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">Create Account</h2>
-          
+
           {error && (
             <div className="bg-red-50 text-red-600 p-3 rounded-md mb-4">
               {error}

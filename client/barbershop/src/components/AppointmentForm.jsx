@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
+
 export const AppointmentForm = ({ barberId, onSubmit, onClose }) => {
   const [services, setServices] = useState([]);
   const [barbers, setBarbers] = useState([]);
@@ -11,6 +12,7 @@ export const AppointmentForm = ({ barberId, onSubmit, onClose }) => {
   const [selectedTime, setSelectedTime] = useState('');
 
   useEffect(() => {
+
     // Fetch services
     fetch('/api/services')
       .then(res => res.json())
@@ -26,9 +28,18 @@ export const AppointmentForm = ({ barberId, onSubmit, onClose }) => {
     }
   }, [barberId]);
 
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  if (!storedUser || !storedUser.id) {
+    console.error("No user found in localStorage");
+    return;
+  }
+
+  const clientId = storedUser.id;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({
+      clientId: clientId,
       barberId: selectedBarber,
       serviceId: selectedService,
       date: selectedDate,

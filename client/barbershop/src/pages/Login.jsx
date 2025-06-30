@@ -30,7 +30,7 @@ export const Login = () => {
       <div className="w-full max-w-md">
         <div className="bg-white px-8 py-6 rounded-lg shadow-md">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">Welcome Back</h2>
-          
+
           {error && (
             <div className="bg-red-50 text-red-600 p-3 rounded-md mb-4">
               {error}

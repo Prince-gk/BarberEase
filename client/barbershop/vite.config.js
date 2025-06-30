@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
 			proxy: {
 				'/api': {
 					target: 'https://barberease-3kbc.onrender.com/',
+					//target: 'http://127.0.0.1:5000',
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/api/, ''),
 				},

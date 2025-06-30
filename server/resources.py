@@ -28,7 +28,12 @@ class ClientList(Resource):
             return {"error": "Invalid input"}, 400
 
         try:
-            client = Client(name=data["name"], email=data["email"], phone=data["phone"])
+            password = data.get("password", "")
+            if not password or len(password) < 6:
+                return {"error": "Password must be at least 6 characters long."}, 400
+            # Hash the password before storing
+            data["password"] = Client.hash_password(password)
+            client = Client(name=data["name"], email=data["email"], phone=data["phone"], password=data["password"])
             db.session.add(client)
             db.session.commit()
             return client.to_dict(), 201
@@ -88,6 +93,19 @@ class ServiceList(Resource):
             return {"error": str(e)}, 400
 
 
+class Login(Resource):
+    def post(self):
+        data = request.get_json()
+        if not data or not data.get("email") or not data.get("password"):
+            return {"error": "Invalid input"}, 400
+
+        client = Client.query.filter_by(email=data["email"]).first()
+        if not client or not Client.check_password(data["password"], client.password):
+            return {"error": "Invalid email or password"}, 401
+
+        return client.to_dict(), 200
+
+
 # -------- Reviews --------
 class ReviewList(Resource):
     def get(self):
@@ -134,7 +152,13 @@ class ReviewList(Resource):
 # -------- Appointments (Full CRUD) --------
 class AppointmentList(Resource):
     def get(self):
-        return [appt.to_dict() for appt in Appointment.query.all()], 200
+        # Fetch appointments for a specific client (via query param)
+        client_id = request.args.get("clientId")
+        if not client_id:
+            return {"error": "clientId query parameter is required"}, 400
+
+        appointments = Appointment.query.filter_by(client_id=client_id).all()
+        return [appt.to_dict() for appt in appointments], 200
 
     def post(self):
         data = request.get_json()
@@ -142,13 +166,13 @@ class AppointmentList(Resource):
         if not data:
             return {"error": "Invalid input: no JSON received"}, 400
 
-        required_fields = ["barberId", "serviceId", "date", "time"]
+        required_fields = ["clientId", "barberId", "serviceId", "date", "time"]
         missing = [field for field in required_fields if field not in data]
         if missing:
             return {"error": f"Missing fields: {', '.join(missing)}"}, 400
 
         try:
-            # Combine and parse date and time into datetime object
+            # Combine and parse date and time into a datetime object
             date_str = data["date"].strip()
             time_str = data["time"].strip()
 
@@ -156,7 +180,7 @@ class AppointmentList(Resource):
             date_time = datetime.strptime(f"{date_str}T{time_str.zfill(5)}", "%Y-%m-%dT%H:%M")
 
             appt = Appointment(
-                client_id="unknown",  # Replace with actual logic if available
+                client_id=int(data["clientId"]),
                 barber_id=int(data["barberId"]),
                 service_id=int(data["serviceId"]),
                 date_time=date_time,

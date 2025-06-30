@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
 
       const userData = await response.json();
       setUser(userData);
+      // localStorage.setItem('token', userData.token);
       localStorage.setItem('user', JSON.stringify(userData));
     } catch (error) {
       console.error('Login error:', error);
@@ -40,12 +41,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, phone, password) => {
     try {
       const response = await fetch('/api/clients', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, phone, password }),
       });
 
       if (!response.ok) throw new Error('Registration failed');

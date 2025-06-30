@@ -7,6 +7,8 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Appointments } from './pages/Appointments';
 import { useAuth } from './context/AuthContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PrivateRoute = ({ children }) => {
   const { user } = useAuth();
@@ -15,29 +17,33 @@ const PrivateRoute = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Navbar />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/appointments"
-                element={
-                  <PrivateRoute>
-                    <Appointments />
-                  </PrivateRoute>
-                }
-              />
-            </Routes>
-          </main>
-        </div>
-      </AuthProvider>
-    </Router>
+    <>
+      <ToastContainer />
+      <Router>
+        <AuthProvider>
+          <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/barbers" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="/appointments"
+                  element={
+                    <PrivateRoute>
+                      <Appointments />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+            </main>
+          </div>
+        </AuthProvider>
+      </Router>
+    </>
   );
 }
 
-export default App;
+export default App;;

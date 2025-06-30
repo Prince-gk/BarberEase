@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BarberCard } from '../components/BarberCard';
 import { AppointmentForm } from '../components/AppointmentForm';
+import { toast } from 'react-toastify';
 
 export const Home = () => {
   const [barbers, setBarbers] = useState([]);
@@ -38,11 +39,25 @@ export const Home = () => {
 
       if (!response.ok) throw new Error('Failed to book appointment');
 
+      const result = await response.json();
+
+      toast.success(`🎉 Appointment booked with Barber #${result.barber_id} on ${new Date(result.date_time).toLocaleString()}`, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "colored",
+      });
+
       setShowAppointmentForm(false);
     } catch (error) {
       console.error('Error booking appointment:', error);
+      toast.error(`❌ Booking failed: ${error.message}`, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "colored",
+      });
     }
   };
+
 
   if (loading) {
     return (

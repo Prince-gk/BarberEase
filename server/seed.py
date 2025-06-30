@@ -48,7 +48,7 @@ with app.app_context():
     clients = []
     for _ in range(10):
         client = Client(
-            name=fake.name(), email=fake.unique.email(), phone=fake.phone_number()
+            name=fake.name(), email=fake.unique.email(), phone=fake.phone_number(), password=fake.password(length=10, special_chars=True)
         )
         clients.append(client)
     db.session.add_all(clients)
